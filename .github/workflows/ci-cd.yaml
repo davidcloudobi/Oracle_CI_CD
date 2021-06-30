@@ -1,42 +1,80 @@
-name: Continuous Integration and Deployment
+# name: Continuous Integration and Deployment
+
+# on:
+#   push:
+#     branches:
+#       - master
+      
+# # env:
+# #   DOTNET_VERSION: '5.0.x'
+# #   AZURE_WEBAPP_NAME: davidcloudobi-github-action-demo
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out code 😃
+#         uses: actions/checkout@v2
+        
+#       - name: Setup .NET 5 😠
+#         uses: actions/setup-dotnet@v1
+#         with:
+#           dotnet-version: '5.0.x'
+#           # dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+#       - name: Restore  dependecies 🛩️
+#         run: dotnet restore
+        
+#       - name: Build app 🚀
+#         run: dotnet build -c Release --no-restore
+        
+#       - name: Run automated tests 🎙️
+#         run: dotnet test -c Release --no-build
+
+#       - name: Publish app 📰
+#         run: dotnet publish -c Release -o ./out
+
+#       - name: Run azure webapp deploy action using publish profile credentials 🍤
+#         uses: azure/webapps-deploy@v2
+#         with:
+#           app-name: davidcloudobi-github-action-demo
+#           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET_DEMO }}
+#           package: ./out
+
+
+name: Azure App Service - davidcloudobi-github-action-demo-test(Production), Build and deploy DotnetCore app
 
 on:
   push:
     branches:
       - master
-      
-# env:
-#   DOTNET_VERSION: '5.0.x'
-#   AZURE_WEBAPP_NAME: davidcloudobi-github-action-demo
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out code 😃
-        uses: actions/checkout@v2
-        
-      - name: Setup .NET 5 😠
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-          # dotnet-version: ${{ env.DOTNET_VERSION }}
-        
-      - name: Restore  dependecies 🛩️
-        run: dotnet restore
-        
-      - name: Build app 🚀
-        run: dotnet build -c Release --no-restore
-        
-      - name: Run automated tests 🎙️
-        run: dotnet test -c Release --no-build
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
 
-      - name: Publish app 📰
-        run: dotnet publish -c Release -o ./out
 
-      - name: Run azure webapp deploy action using publish profile credentials 🍤
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: davidcloudobi-github-action-demo
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET_DEMO }}
-          package: ./out
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+    - name: Run Azure webapp deploy action using publish profile credentials
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: davidcloudobi-github-action-demo
+        slot-name: Production
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET_DEMO }}
+        package: ${{env.DOTNET_ROOT}}/myapp
+
