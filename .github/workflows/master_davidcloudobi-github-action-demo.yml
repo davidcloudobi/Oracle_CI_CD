@@ -67,7 +67,7 @@ jobs:
         
     - name:  Start SQL Server 😘
       run: |
-        docker run -d -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Ollasystems123#' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+        docker run -d -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Ollasystems123#' -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
     
     - name: Sleep for 5 seconds 😴
       uses: jakejarvis/wait-action@master
@@ -80,7 +80,7 @@ jobs:
     - name: Run automated tests 🎙️
       env:
         ConnectionStrings__DefaultConnection: Server=localhost;Database=CustomerGitHubActionsCICD_Test;User=sa;Password=Ollasystems123#;
-      run: dotnet test -c Release --no-build
+      run: dotnet test -c Release
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
