@@ -22,9 +22,23 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
+        
+    - name:  Start SQL Server 😘
+      run: |
+        docker run -d -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Ollasystems123#' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+    
+    - name: Sleep for 5 seconds 😴
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '5s'
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
+      
+    - name: Run automated tests 🎙️
+      env:
+        ConnectionStrings__DefaultConnection: Server=localhost;Database=CustomerGitHubActionsCICD_Test;User=sa;Password=Ollasystems123#;
+      run: dotnet test -c Release --no-build
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
