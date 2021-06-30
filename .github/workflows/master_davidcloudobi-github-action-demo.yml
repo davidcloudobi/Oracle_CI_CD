@@ -10,11 +10,14 @@ on:
 #   AZURE_WEBAPP_NAME: davidcloudobi-github-action-demo
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code 😃
-        uses: actions/checkout@v2
+    build-and-deploy:
+      runs-on: ubuntu-latest
+
+      steps:
+      # checkout the repo
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
+
         
       - name: Setup .NET 5 😠
         uses: actions/setup-dotnet@v1
