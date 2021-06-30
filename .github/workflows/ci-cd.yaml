@@ -5,9 +5,9 @@ on:
     branches:
       - master
       
-env:
-  DOTNET_VERSION: '5.0.x'
-  AZURE_WEBAPP_NAME: davidcloudobi-github-action-demo
+# env:
+#   DOTNET_VERSION: '5.0.x'
+#   AZURE_WEBAPP_NAME: davidcloudobi-github-action-demo
 
 jobs:
   build:
@@ -19,7 +19,8 @@ jobs:
       - name: Setup .NET 5 😠
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '5.0.x'
+          # dotnet-version: ${{ env.DOTNET_VERSION }}
         
       - name: Restore  dependecies 🛩️
         run: dotnet restore
@@ -36,6 +37,6 @@ jobs:
       - name: Run azure webapp deploy action using publish profile credentials 🍤
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: davidcloudobi-github-action-demo
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET_DEMO }}
           package: ./out
