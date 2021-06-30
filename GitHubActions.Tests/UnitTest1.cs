@@ -16,23 +16,23 @@ namespace GitHubActions.Tests
 
         }
 
-        [Fact]
-        public async Task CustomerIntegrationTest()
-        {
-            var context = new CustomerContextFactory().CreateDbContext();
+        //[Fact]
+        //public async Task CustomerIntegrationTest()
+        //{
+        //    var context = new CustomerContextFactory().CreateDbContext();
 
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
+        //    await context.Database.EnsureDeletedAsync();
+        //    await context.Database.EnsureCreatedAsync();
 
-            var controller = new CustomersController(context);
+        //    var controller = new CustomersController(context);
 
-            await controller.Add(new Customer { CustomerName = "CloudObi" });
+        //    await controller.Add(new Customer { CustomerName = "CloudObi" });
 
-            var result = (await controller.GetAll()).ToArray();
+        //    var result = (await controller.GetAll()).ToArray();
 
-            Assert.Single(result);
-            Assert.Equal("CloudObi", result[0].CustomerName);
+        //    Assert.Single(result);
+        //    Assert.Equal("CloudObi", result[0].CustomerName);
 
-        }
+        //}
     }
 }
