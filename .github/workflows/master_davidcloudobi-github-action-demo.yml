@@ -67,7 +67,7 @@ jobs:
         
     - name:  Start SQL Server 😘
       run: |
-        docker run -d -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Ollasystems123#' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+        docker run -d -p 1433:1433 -e sa_password=Ollasystems123# -d -e ACCEPT_EULA=Y microsoft/mssql-server-windows-developer:latest
     
     - name: Sleep for 5 seconds 😴
       uses: jakejarvis/wait-action@master
