@@ -46,7 +46,7 @@
 #           package: ./out
 
 
-name: Azure App Service - davidcloudobi-github-action-demo-test(Production), Build and deploy DotnetCore app
+name: Azure App Service - davidcloudobi-github-action-demo(Production), Build and deploy DotnetCore app
 
 on:
   push:
@@ -68,22 +68,8 @@ jobs:
       with:
         dotnet-version: '5.0.x'
         
-    # - name:  Start SQL Server 😘
-    #   run: |
-    #     docker run -d -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Ollasystems123#' -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
-    
-    # - name: Sleep for 5 seconds 😴
-    #   uses: jakejarvis/wait-action@master
-    #   with:
-    #     time: '5s'
-    
     - name: Build with dotnet
       run: dotnet build --configuration Release
-
-    # - name: Run automated tests 🎙️
-    #   env:
-    #     ConnectionStrings__DefaultConnection: Server=localhost;Database=CustomerGitHubActionsCICD_Test;User=sa;Password=Ollasystems123#;
-    #   run: dotnet test -c Release
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
