@@ -1,0 +1,57 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Continuous Integration and Deployment
+
+on:
+  push:
+    branches:
+      - master
+      
+# env:
+#   DOTNET_VERSION: '5.0.x'
+#   AZURE_WEBAPP_NAME: davidcloudobi-github-action-demo
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code 😃
+        uses: actions/checkout@v2
+        
+      - name: Setup .NET 5 😠
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+          # dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+      - name:  Start SQL Server 😘
+        run: |
+          docker run -d -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Ollasystems123#' -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
+      
+      - name: Sleep for 5 seconds 😴
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '5s'
+          
+      - name: Restore  dependecies 🛩️
+        run: dotnet restore
+        
+      - name: Build app 🚀
+        run: dotnet build -c Release --no-restore
+
+      - name: Run automated tests 🎙️
+        env:
+          ConnectionStrings__DefaultConnection: Server=localhost;Database=CustomerGitHubActionsCICD_Test;User=sa;Password=Ollasystems123#;
+        run: dotnet test -c Release
+
+      # - name: Publish app 📰
+      #   run: dotnet publish -c Release -o ./out
+
+      # - name: Run azure webapp deploy action using publish profile credentials 🍤
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: davidcloudobi-github-action-demo
+      #     # app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET_DEMO }}
+      #     package: ./out
